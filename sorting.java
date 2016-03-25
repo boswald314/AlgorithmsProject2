@@ -16,7 +16,7 @@ public class sorting {
 
 
 
-
+	// Utility functions
 	private static void printArray(String msg) {
 		System.out.print(msg + " [" + arr[0]);
 		for(int i=1; i<size; i++) {
@@ -43,21 +43,21 @@ public class sorting {
 
 
 
-
+	// Insertion Sort
 	public static void insertSort(int left, int right) {
-	  // insertSort the subarray arr[left, right]
-	  int i, j;
+		// insertSort the subarray arr[left, right]
+		int i, j;
 
-	  for(i=left+1; i<=right; i++) {
+		for(i=left+1; i<=right; i++) {
 		int temp = arr[i];           // store a[i] in temp
 		j = i;                       // start shifts at i
 		// until one is smaller,
 		while(j>left && arr[j-1] >= temp) {
-		  arr[j] = arr[j-1];        // shift item to right
-		  --j;                      // go left one position
+			arr[j] = arr[j-1];        // shift item to right
+			--j;                      // go left one position
 		}
 		arr[j] = temp;              // insert stored item
-	  }  // end for
+		}  // end for
 	}  // end insertSort()
 	
 	public static void insertionSort() {
@@ -68,10 +68,10 @@ public class sorting {
 
 
 
-	
+	// Heapsort and auxilliary functions
 	public static void maxheapify(int i, int n) { 
-	   // Pre: the left and right subtrees of node i are max heaps.
-	   // Post: make the tree rooted at node i as max heap of n nodes.
+		 // Pre: the left and right subtrees of node i are max heaps.
+		 // Post: make the tree rooted at node i as max heap of n nodes.
 		int max = i;
 		int left=2*i+1;
 		int right=2*i+2;
@@ -89,7 +89,7 @@ public class sorting {
 		int t=arr[i];
 		arr[i]=arr[j];
 		arr[j]=t; 
-   }
+	 }
 	
 	public static void heapsort(){
 		// Build an in-place bottom up max heap
@@ -105,21 +105,7 @@ public class sorting {
 
 
 
-
-	private static void mergesort(int low, int high) {
-		// Check if low is smaller then high, if not then the array is sorted
-		if (low < high) {
-		  // Get the index of the element which is in the middle
-		  int middle = low + (high - low) / 2;
-		  // Sort the left side of the array
-		  mergesort(low, middle);
-		  // Sort the right side of the array
-		  mergesort(middle + 1, high);
-		  // Combine them both
-		  merge(low, middle, high);
-		}
-	  }
-
+	// Merge sort and variations
 	private static void bottomupsort(int low, int high) {
 		// Variation on merge sort, iterates along list rather than recursively bifurcating
 		if (low < high) {	// else empty subarray is trivially sorted
@@ -137,11 +123,79 @@ public class sorting {
 		}
 	}
 
+	private static void mergesort(int low, int high) {
+		// Check if low is smaller then high, if not then the array is sorted
+		if (low < high) {
+			// Get the index of the element which is in the middle
+			int middle = low + (high - low) / 2;
+			// Sort the left side of the array
+			mergesort(low, middle);
+			// Sort the right side of the array
+			mergesort(middle + 1, high);
+			// Combine them both
+			merge(low, middle, high);
+		}
+	}
+
+	private static void mergesortA(int low, int high) {
+		// Check if low is smaller then high, if not then the array is sorted
+		if (low < high) {
+			// Get the index of the element which is in the middle
+			int middle = low + (high - low) / 2;
+			// Sort the left side of the array
+			if ( !(isSorted(low,middle)) && (middle - low) >= 100) {
+				mergesort(low, middle);
+			} else { insertSort(low, middle); }
+			// Sort the right side of the array
+			if ( !(isSorted(middle + 1, high)) && (high - (middle + 1) >= 100)) {
+				mergesort(middle + 1, high);
+			}
+			// Combine them both
+			merge(low, middle, high);
+		}
+	}
+
+	private static void mergesortB(int low, int high) {
+		// Check if low is smaller then high, if not then the array is sorted
+		if (low < high) {
+			// Get the index of the element which is in the middle
+			int middle = low + (high - low) / 2;
+			// Sort the left side of the array
+			if (!(isSorted(low,middle))) {
+				mergesort(low, middle);
+			}
+			// Sort the right side of the array
+			if (!(isSorted(middle + 1, high))) {
+				mergesort(middle + 1, high);
+			}
+			// Combine them both
+			merge(low, middle, high);
+		}
+	}
+
+	private static void mergesortC(int low, int high) {
+		// Check if low is smaller then high, if not then the array is sorted
+		if (low < high) {
+			// Get the index of the element which is in the middle
+			int middle = low + (high - low) / 2;
+			// Sort the left side of the array
+			if ((middle - low) >= 100) {
+				mergesort(low, middle);
+			} else { insertSort(low, middle); }
+			// Sort the right side of the array
+			if ((high - (middle + 1)) >= 100) {
+				mergesort(middle + 1, high);
+			} else { insertSort(middle + 1, high); }
+			// Combine them both
+			merge(low, middle, high);
+		}
+	}
+
 	private static void merge(int low, int middle, int high) {
 
 		// Copy first part into the arrCopy array
 		for (int i = low; i <= middle; i++) {
-		  arrCopy2[i] = arr[i];
+			arrCopy2[i] = arr[i];
 		}
 
 		int i = low;
@@ -151,25 +205,30 @@ public class sorting {
 		// Copy the smallest values from either the left or the right side back
 		// to the original array
 		while (i <= middle && j <= high) {
-		  if (arrCopy2[i] <= arr[j]) {
+			if (arrCopy2[i] <= arr[j]) {
 			arr[k] = arrCopy2[i];
 			i++;
-		  } else {
+			} else {
 			arr[k] = arr[j];
 			j++;
-		  }
-		  k++;
+			}
+			k++;
 		}
 	
 		// Copy the rest of the left part of the array into the target array
 		while (i <= middle) {
-		  arr[k] = arrCopy2[i];
-		  k++;
-		  i++;
+			arr[k] = arrCopy2[i];
+			k++;
+			i++;
 		}
 
 	}
-	  
+
+
+
+
+
+	// Quicksort and variations
 	private static void quicksort(int low, int high) {
 		int i = low, j = high;
 
@@ -178,31 +237,31 @@ public class sorting {
 
 		// Divide into two lists
 		while (i <= j) {
-			  // If the current value from the left list is smaller then the pivot
-			  // element then get the next element from the left list
-			  while (arr[i] < pivot) i++;
-			  
-			  // If the current value from the right list is larger then the pivot
-			  // element then get the next element from the right list
-			  while (arr[j] > pivot) j--;
+				// If the current value from the left list is smaller then the pivot
+				// element then get the next element from the left list
+				while (arr[i] < pivot) i++;
+				
+				// If the current value from the right list is larger then the pivot
+				// element then get the next element from the right list
+				while (arr[j] > pivot) j--;
 
-			  // If we have found a value in the left list which is larger than
-			  // the pivot element and if we have found a value in the right list
-			  // which is smaller then the pivot element then we exchange the
-			  // values.
-			  // As we are done we can increase i and j
-			  if (i < j) {
+				// If we have found a value in the left list which is larger than
+				// the pivot element and if we have found a value in the right list
+				// which is smaller then the pivot element then we exchange the
+				// values.
+				// As we are done we can increase i and j
+				if (i < j) {
 				exchange(i, j);
 				i++;
 				j--;
-			  } else if (i == j) { i++; j--; }
+				} else if (i == j) { i++; j--; }
 		}
 
 		// Recursion
 		if (low < j)
-			  quicksort(low, j);
+				quicksort(low, j);
 		if (i < high)
-			  quicksort(i, high);
+				quicksort(i, high);
 	}
 
 	private static void quicksortA(int low, int high) {
@@ -213,37 +272,37 @@ public class sorting {
 
 		// Divide into two lists
 		while (i <= j) {
-			  // If the current value from the left list is smaller then the pivot
-			  // element then get the next element from the left list
-			  while (arr[i] < pivot) i++;
-			  
-			  // If the current value from the right list is larger then the pivot
-			  // element then get the next element from the right list
-			  while (arr[j] > pivot) j--;
+				// If the current value from the left list is smaller then the pivot
+				// element then get the next element from the left list
+				while (arr[i] < pivot) i++;
+				
+				// If the current value from the right list is larger then the pivot
+				// element then get the next element from the right list
+				while (arr[j] > pivot) j--;
 
-			  // If we have found a value in the left list which is larger than
-			  // the pivot element and if we have found a value in the right list
-			  // which is smaller then the pivot element then we exchange the
-			  // values.
-			  // As we are done we can increase i and j
-			  if (i < j) {
+				// If we have found a value in the left list which is larger than
+				// the pivot element and if we have found a value in the right list
+				// which is smaller then the pivot element then we exchange the
+				// values.
+				// As we are done we can increase i and j
+				if (i < j) {
 				exchange(i, j);
 				i++;
 				j--;
-			  } else if (i == j) { i++; j--; }
+				} else if (i == j) { i++; j--; }
 		}
 
 		// Recursion
 		if (low < j && !(isSorted(low,j)) && !((j-low) < 100)) {
 			quicksort(low, j);
 		} else {
-    		insertSort(low,j);
-    	}
+				insertSort(low,j);
+			}
 		if (i < high && !(isSorted(i,high)) && !((high-i) < 100)) {
 			quicksort(i, high);
 		} else {
-    		insertSort(i,high);
-    	}
+				insertSort(i,high);
+			}
 	}
 
 	private static void quicksortB(int low, int high) {
@@ -254,41 +313,41 @@ public class sorting {
 
 		// Divide into two lists
 		while (i <= j) {
-			  // If the current value from the left list is smaller then the pivot
-			  // element then get the next element from the left list
-			  while (arr[i] < pivot) i++;
-			  
-			  // If the current value from the right list is larger then the pivot
-			  // element then get the next element from the right list
-			  while (arr[j] > pivot) j--;
+				// If the current value from the left list is smaller then the pivot
+				// element then get the next element from the left list
+				while (arr[i] < pivot) i++;
+				
+				// If the current value from the right list is larger then the pivot
+				// element then get the next element from the right list
+				while (arr[j] > pivot) j--;
 
-			  // If we have found a value in the left list which is larger than
-			  // the pivot element and if we have found a value in the right list
-			  // which is smaller then the pivot element then we exchange the
-			  // values.
-			  // As we are done we can increase i and j
-			  if (i < j) {
+				// If we have found a value in the left list which is larger than
+				// the pivot element and if we have found a value in the right list
+				// which is smaller then the pivot element then we exchange the
+				// values.
+				// As we are done we can increase i and j
+				if (i < j) {
 				exchange(i, j);
 				i++;
 				j--;
-			  } else if (i == j) { i++; j--; }
+				} else if (i == j) { i++; j--; }
 		}
 
 		// Recursion
 		if (low < j && !(isSorted(low,j)))
-			  quicksort(low, j);
+				quicksort(low, j);
 		if (i < high && !(isSorted(i,high)))
-			  quicksort(i, high);
+				quicksort(i, high);
 	}
 
-    private static void quicksortC(int low, int high) {
-	    int i = low, j = high;
+	private static void quicksortC(int low, int high) {
+		int i = low, j = high;
 
-	    // Get the pivot element from the middle of the list
-	    int pivot = arr[(high+low)/2];
+		// Get the pivot element from the middle of the list
+		int pivot = arr[(high+low)/2];
 
-	    // Divide into two lists
-	    while (i <= j) {
+		// Divide into two lists
+		while (i <= j) {
 			// If the current value from the left list is smaller then the pivot
 			// element then get the next element from the left list
 			while (arr[i] < pivot) i++;
@@ -303,24 +362,27 @@ public class sorting {
 			// values.
 			// As we are done we can increase i and j
 			if (i < j) {
-			exchange(i, j);
-			i++;
-			j--;
+				exchange(i, j);
+				i++;
+				j--;
 			} else if (i == j) { i++; j--; }
-        }
+		}
 
-    	// Recursion
-    	if (low < j && !((j-low) < 100)) {
-    	    quicksort(low, j);
-    	} else {
-    		insertSort(low,j);
-    	}
-    	if (i < high && !((high-i) < 100)) {
-    	    quicksort(i, high);
-    	} else {
-    		insertSort(i,high);
-    	}
-    }
+		// Recursion
+		if (low < j && !((j-low) < 100)) {
+				quicksort(low, j);
+		} else {
+			insertSort(low,j);
+		}
+		if (i < high && !((high-i) < 100)) {
+				quicksort(i, high);
+		} else {
+			insertSort(i,high);
+		}
+	}
+
+
+
 
 	public static void main(String[] args) {
 		
@@ -337,7 +399,7 @@ public class sorting {
 		} catch(Exception ex){
 			ex.printStackTrace();
 		}
-		   
+			 
 		// create array
 		arr = new int[size];
 		arrCopy = new int[size];
@@ -345,7 +407,7 @@ public class sorting {
 			
 		// fill array
 		for(int i=0; i<size; i++) 
-		   arr[i] = arrCopy[i] = randomGenerator.nextInt(random);
+			 arr[i] = arrCopy[i] = randomGenerator.nextInt(random);
 
 
 		System.out.print("\n--BEGIN TRIALS--\n");
@@ -379,6 +441,30 @@ public class sorting {
 		if (size < 101) printArray("out");
 		finish = System.currentTimeMillis();
 		System.out.println("mergesort: " + (finish-start) + " milliseconds.");
+
+		for(int i=0; i<size; i++) arr[i] = arrCopy[i];
+		start = finish;
+		if (size < 101) printArray("in");
+		mergesortA(0, size-1);
+		if (size < 101) printArray("out");
+		finish = System.currentTimeMillis();
+		System.out.println("mergesortA: " + (finish-start) + " milliseconds.");
+
+		for(int i=0; i<size; i++) arr[i] = arrCopy[i];
+		start = finish;
+		if (size < 101) printArray("in");
+		mergesortB(0, size-1);
+		if (size < 101) printArray("out");
+		finish = System.currentTimeMillis();
+		System.out.println("mergesortB: " + (finish-start) + " milliseconds.");
+
+		for(int i=0; i<size; i++) arr[i] = arrCopy[i];
+		start = finish;
+		if (size < 101) printArray("in");
+		mergesortC(0, size-1);
+		if (size < 101) printArray("out");
+		finish = System.currentTimeMillis();
+		System.out.println("mergesortC: " + (finish-start) + " milliseconds.");
 
 		// Bottom up sort
 		for(int i=0; i<size; i++) arr[i] = arrCopy[i];
