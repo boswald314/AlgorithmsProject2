@@ -205,6 +205,47 @@ public class sorting {
 			  quicksort(i, high);
 	}
 
+	private static void quicksortA(int low, int high) {
+		int i = low, j = high;
+
+		// Get the pivot element from the middle of the list
+		int pivot = arr[(high+low)/2];
+
+		// Divide into two lists
+		while (i <= j) {
+			  // If the current value from the left list is smaller then the pivot
+			  // element then get the next element from the left list
+			  while (arr[i] < pivot) i++;
+			  
+			  // If the current value from the right list is larger then the pivot
+			  // element then get the next element from the right list
+			  while (arr[j] > pivot) j--;
+
+			  // If we have found a value in the left list which is larger than
+			  // the pivot element and if we have found a value in the right list
+			  // which is smaller then the pivot element then we exchange the
+			  // values.
+			  // As we are done we can increase i and j
+			  if (i < j) {
+				exchange(i, j);
+				i++;
+				j--;
+			  } else if (i == j) { i++; j--; }
+		}
+
+		// Recursion
+		if (low < j && !(isSorted(low,j)) && !((j-low) < 100)) {
+			quicksort(low, j);
+		} else {
+    		insertSort(low,j);
+    	}
+		if (i < high && !(isSorted(i,high)) && !((high-i) < 100)) {
+			quicksort(i, high);
+		} else {
+    		insertSort(i,high);
+    	}
+	}
+
 	private static void quicksortB(int low, int high) {
 		int i = low, j = high;
 
@@ -274,7 +315,7 @@ public class sorting {
     	} else {
     		insertSort(low,j);
     	}
-    	if (i < high && !((j-low) < 100)) {
+    	if (i < high && !((high-i) < 100)) {
     	    quicksort(i, high);
     	} else {
     		insertSort(i,high);
@@ -359,6 +400,14 @@ public class sorting {
 		if (size < 101) printArray("out");
 		finish = System.currentTimeMillis();
 		System.out.println("quicksort: " + (finish-start) + " milliseconds.");
+
+		for(int i=0; i<size; i++) arr[i] = arrCopy[i];
+		start = finish;
+		if (size < 101) printArray("in");
+		quicksortA(0, size-1);
+		if (size < 101) printArray("out");
+		finish = System.currentTimeMillis();
+		System.out.println("quicksortA: " + (finish-start) + " milliseconds.");
 
 		for(int i=0; i<size; i++) arr[i] = arrCopy[i];
 		start = finish;
