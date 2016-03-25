@@ -89,6 +89,22 @@ public class sorting {
         }
       }
 
+    private static void bottomupsort(int low, int high) {
+    	if (low < high) {
+    		int t = 1;
+    		while (t < high) {
+    			int s = t; t = 2*s; int i = 0;
+    			while ((i + t) <= high) {
+    				merge(i+1,i+s,i+t);
+    				i = i + t;
+    			}
+    			if ((i + s) < high) {
+    				merge(i+1,i+s,high);
+    			}
+    		}
+    	}
+    }
+
     private static void merge(int low, int middle, int high) {
 
         // Copy first part into the arrCopy array
@@ -207,6 +223,15 @@ public class sorting {
         if (size < 101) printArray("out");
         finish = System.currentTimeMillis();
         System.out.println("mergesort: " + (finish-start) + " milliseconds.");
+
+        // Bottom up sort
+        for(int i=0; i<size; i++) arr[i] = arrCopy[i];
+        start = finish;
+    	if (size < 101) printArray("in");
+    	bottomupsort(0, size-1);
+    	if (size < 101) printArray("out");
+    	finish = System.currentTimeMillis();
+    	System.out.println("bottomupsort: " + (finish-start) + " milliseconds.");
 
         // Quick sort
         for(int i=0; i<size; i++) arr[i] = arrCopy[i];
