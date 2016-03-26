@@ -612,7 +612,7 @@ public class sorting {
 		}
 	}
 
-	public static void bottomtest(String[] sortFuncs) {
+	public static void smallTest(String[] sortFuncs) {
 		randomGenerator = new Random();
 		
 		rounds = 100;
@@ -661,7 +661,7 @@ public class sorting {
 			runTests();
 			//comparePerformance(toRun1);
 			//comparePerformance(toRun2);
-			//bottomtest(toRun);
+			//smallTest(toRun);
 			
 			break;
 			/*
