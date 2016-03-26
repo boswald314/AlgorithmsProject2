@@ -1,0 +1,29 @@
+Project 2
+Bryan Oswald
+
+
+Problem 1:
+I found that bottom up merge sort performed better in all cases. In addition, relative performance improved on increase of both array size and element range. That being said, the difference is not substantial; on the order of milliseconds for doubling of input size. The worst case of running time appeared to be the same, negating some of the advantage. 
+merge sort average runtime: [82.42, 103.01, 171.47, 217.45, 348.94, 452.41]
+bottom up sort average runtime: [77.29, 96.24, 164.43, 207.68, 338.52, 433.67]
+
+Comparisons for bottom up is big theta (n log n)/2 and O(nlogn-n+1)
+
+
+Problem 2:
+	size		1000000			2000000			4000000
+	range	1K		1M		1K		1M		1K		1M
+
+	merge: 	[80.75,	100.31,	169.22, 216.2,	340.3,	444.19],
+	mergeA:	[80.60, 100.51, 169.24, 216.28, 337.97, 443.13],
+	mergeB:	[79.88, 100.44, 169.25, 216.06, 338.29, 442.91],
+	mergeC:	[80.58, 100.42, 169.21, 216.14, 339.52, 442.87]
+
+
+	quick:	[49.2, 78.37, 102.07, 163.33, 204.38, 326.65],
+	quickA:	[49.29, 78.18, 101.91, 163.73, 204.62, 325.35],
+	quickB:	[49.26, 78.2, 101.91, 163.72, 202.72, 326.29],
+	quickC:	[49.28, 78.26, 101.85, 163.43, 204.35, 325.46]
+
+
+Average runtime for each algorithm printed above. Quick sort was substantially faster than merge sort, but I did not find significant differences between the implementations. 
