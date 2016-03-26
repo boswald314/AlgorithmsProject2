@@ -19,6 +19,8 @@ public class sorting {
 	private static int random;
 
 	private long start, finish;
+	
+
 	private static List<String> nextRow = new ArrayList<String>();
 
 
@@ -44,8 +46,6 @@ public class sorting {
 		}
 		return true;
 	}
-
-
 
 
 
@@ -118,7 +118,7 @@ public class sorting {
 		if (low < high) {	// else empty subarray is trivially sorted
 			int t = 1; 		// This currently leaves initial element unsorted (need to fix)
 			while (t < high) {
-				int s = t; t = 2*s; int i = 0;
+				int s = t; t = 2*s; int i = -1;
 				while ((i + t) <= high) {
 					merge(i+1,i+s,i+t);
 					i = i + t;
@@ -488,14 +488,11 @@ public class sorting {
 
 	}
 
-
-	public static void main(String[] args) {
-		
+	private static void runTests() {
 		read = new BufferedReader(new InputStreamReader(System.in));
 		randomGenerator = new Random();
+		TableBuilder tb = new TableBuilder();
 
-
-	
 		try {
 			System.out.print("Please enter number of instances to try: ");
 			rounds = Integer.parseInt(read.readLine());
@@ -509,7 +506,7 @@ public class sorting {
 			ex.printStackTrace();
 		}
 
-		TableBuilder tb = new TableBuilder();
+		
 		tb.addRow("Arrays.sort","heapsort","mergesort","A","B","C","bottomup","quicksort","A","B","C","qs-NS","insert-NS");
 		
 		for (int x = 0; x < rounds; ++x) {
@@ -569,19 +566,122 @@ public class sorting {
 
 			String[] rowArray = new String[nextRow.size()];
 			tb.addRow(nextRow.toArray(rowArray));
+	
+		}
+		System.out.println(tb.toString());
+	}
 
+	private static void comparePerformance(String[] sortFuncs) {
+		randomGenerator = new Random();
+		
+		rounds = 100;
+		//String[] sortFuncs = {"mergesort", "bottomupsort"};
+		Integer[] ranges = {1000, 1000000};
+
+		for (Integer y = 1000000; y <= 4000000; y *= 2) {
+			size = y;
+			//size = size / 100; // used in testing to reduce runtime
+			for (Integer random: ranges) {
+
+				TableBuilder tb = new TableBuilder();
+				tb.addRow("Array size: " + size, "range: " + random);
+				tb.addRow(sortFuncs);
+				
+				for (int x = 0; x < rounds; ++x) {
+					nextRow.clear();
+
+					// create array
+					arr = new int[size];
+					arrCopy = new int[size];
+					arrCopy2 = new int[size];
+						
+					// fill array
+					for(int i=0; i<size; i++) 
+						 arr[i] = arrCopy[i] = randomGenerator.nextInt(random);
+
+					for (String f: sortFuncs) {
+						test(f);
+					}
+
+					String[] rowArray = new String[nextRow.size()];
+					tb.addRow(nextRow.toArray(rowArray));
+				}
+				System.out.println(tb.toString());
+				System.out.println();
+			}
+		}
+	}
+
+	public static void bottomtest(String[] sortFuncs) {
+		randomGenerator = new Random();
+		
+		rounds = 100;
+		//String[] sortFuncs = {"mergesort", "bottomupsort"};
+		Integer[] ranges = {10, 100};
+
+		size = 25;
+		//size = size / 100; // used in testing to reduce runtime
+		for (Integer random: ranges) {
+
+			TableBuilder tb = new TableBuilder();
+			tb.addRow("Array size: " + size, "range: " + random);
+			tb.addRow(sortFuncs);
 			
+			for (int x = 0; x < rounds; ++x) {
+				nextRow.clear();
 
+				// create array
+				arr = new int[size];
+				arrCopy = new int[size];
+				arrCopy2 = new int[size];
+					
+				// fill array
+				for(int i=0; i<size; i++) 
+					 arr[i] = arrCopy[i] = randomGenerator.nextInt(random);
+
+				for (String f: sortFuncs) {
+					test(f);
+				}
+
+				String[] rowArray = new String[nextRow.size()];
+				tb.addRow(nextRow.toArray(rowArray));
+			}
+			System.out.println(tb.toString());
+			System.out.println();
+		}
+	}
+
+
+	public static void main(String[] args) {
+		
+		while (true) {
+			String[] toRun = {"bottomupsort"};
+			String[] toRun1 = {"mergesort", "bottomupsort"};
+			String[] toRun2 = {"mergesort", "mergesortA", "mergesortB", "mergesortC", "quicksort", "quicksortA", "quicksortB", "quicksortC"};
+			runTests();
+			//comparePerformance(toRun1);
+			//comparePerformance(toRun2);
+			//bottomtest(toRun);
+			
+			break;
 			/*
 			System.out.println("Would you like to run another test? (yes/no)");
 			try {
 				String checkAgain = read.readLine();
-				if (checkAgain.equals("no")) again = false;
+				if (checkAgain.equals("no")) break;
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
+			System.out.println();
 			*/
 		}
-		System.out.println(tb.toString());
+		
 	}
 }
+
+
+
+
+
+
+
