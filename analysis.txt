@@ -4,8 +4,11 @@ Bryan Oswald
 
 Problem 1:
 I found that bottom up merge sort performed better in all cases. In addition, relative performance improved on increase of both array size and element range. That being said, the difference is not substantial; on the order of milliseconds for doubling of input size. The worst case of running time appeared to be the same, negating some of the advantage. 
-merge sort average runtime: [82.42, 103.01, 171.47, 217.45, 348.94, 452.41]
-bottom up sort average runtime: [77.29, 96.24, 164.43, 207.68, 338.52, 433.67]
+
+								size		1000000			2000000			4000000
+								range	1K		1M		1K		1M		1K		1M
+merge sort average runtime: 			[82.42, 103.01, 171.47, 217.45, 348.94, 452.41]
+bottom up sort average runtime: 		[77.29, 96.24,	164.43, 207.68, 338.52, 433.67]
 
 Comparisons for bottom up is big theta (n log n)/2 and O(nlogn-n+1)
 
@@ -27,3 +30,16 @@ Problem 2:
 
 
 Average runtime for each algorithm printed above. Quick sort was substantially faster than merge sort, but I did not find significant differences between the implementations. 
+
+
+Problem 3:
+		size		1000000			2000000			4000000
+		range	1K		1M		1K		1M		1K		1M
+
+quicksort2		[56.15, 86.7, 	112.98, 180.73, 243.27, 372.0],
+Arrays.sort		[6.85, 	2.06, 	12.7, 	7.87, 	27.17, 	29.62],
+heapsort		[151.29,177.77, 320.13, 420.8,	789.79, 1030.64],
+mergesortB		[90.03, 111.26, 182.62, 237.15, 392.95, 510.36],
+quicksortA		[56.03, 86.73, 	113.07, 180.4, 	240.98, 372.55]
+
+The performance of the newly modified quicksort was nearly identical to the version of quicksort used before. The built in Arrays.sort method was surprisingly effiecient, even for the largest instance.

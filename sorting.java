@@ -91,7 +91,7 @@ public class sorting {
 			maxheapify(max, n);
 		}
 	}
-	
+
 	public static void exchange(int i, int j){
 		int t=arr[i];
 		arr[i]=arr[j];
@@ -107,6 +107,7 @@ public class sorting {
 			maxheapify(0, i);     // adjust heap
 		}
 	}
+
 	
 
 
@@ -271,6 +272,41 @@ public class sorting {
 				quicksort(i, high);
 	}
 
+	private static void quicksort2(int low, int high) {
+		int i = low, j = high;
+
+		// Get the pivot element from the middle of the list
+		int pivot = arr[(high+low)/2];
+
+		// Divide into two lists
+		while (i <= j) {
+				// If the current value from the left list is smaller then the pivot
+				// element then get the next element from the left list
+				while (arr[i] < pivot) i++;
+				
+				// If the current value from the right list is larger then the pivot
+				// element then get the next element from the right list
+				while (arr[j] > pivot) j--;
+
+				// If we have found a value in the left list which is larger than
+				// the pivot element and if we have found a value in the right list
+				// which is smaller then the pivot element then we exchange the
+				// values.
+				// As we are done we can increase i and j
+				if (i < j) {
+				exchange(i, j);
+				i++;
+				j--;
+				} else if (i == j) { i++; j--; }
+		}
+
+		// Recursion
+		if (low < j)
+				quicksort(low, j);
+		if (i < high)
+				quicksort(i, high);
+	}
+
 	private static void quicksortA(int low, int high) {
 		int i = low, j = high;
 
@@ -388,6 +424,17 @@ public class sorting {
 		}
 	}
 
+
+
+	private static void reverse() {
+		Arrays.sort(arr, Collections.reverseOrder());
+	}
+
+
+
+
+
+	// functions to run various algorithms on assorted input
 	private static void test(String func) {
 		long start = System.currentTimeMillis();
 
@@ -447,6 +494,13 @@ public class sorting {
 				if (size < 101) printArray("out");
 				break;
 
+			case "quicksort2":
+				for(int i=0; i<size; i++) arr[i] = arrCopy[i];
+				if (size < 101) printArray("in");
+				quicksort2(0, size-1);
+				if (size < 101) printArray("out");
+				break;
+
 			case "quicksortA":
 				for(int i=0; i<size; i++) arr[i] = arrCopy[i];
 				if (size < 101) printArray("in");
@@ -469,6 +523,7 @@ public class sorting {
 				break;
 
 			case "quicksort on nearly-sorted":
+				for(int i=0; i<size; i++) arrCopy2[i] = arr[i];
 				if (size < 101) printArray("in");
 				quicksort(0, size-1);
 				if (size < 101) printArray("out");
@@ -485,7 +540,6 @@ public class sorting {
 
 		long finish = System.currentTimeMillis();
 		nextRow.add( ((finish-start) + "ms").toString() );
-
 	}
 
 	private static void runTests() {
@@ -556,7 +610,7 @@ public class sorting {
 				int k  = randomGenerator.nextInt(size);
 				exchange(j, k);
 			}
-			for(int i=0; i<size; i++) arrCopy2[i] = arr[i];
+			
 
 			// Quick sort on nearly-sorted array
 			test("quicksort on nearly-sorted");
@@ -616,7 +670,6 @@ public class sorting {
 		randomGenerator = new Random();
 		
 		rounds = 100;
-		//String[] sortFuncs = {"mergesort", "bottomupsort"};
 		Integer[] ranges = {10, 100};
 
 		size = 25;
@@ -651,6 +704,87 @@ public class sorting {
 		}
 	}
 
+	private static void problem4(String[] sortFuncs) {
+		randomGenerator = new Random();
+		
+		rounds = 100;
+		Integer[] ranges = {10000, 100000, 1000000};
+
+		size = 2000000;
+		for (Integer random: ranges) {
+			TableBuilder tb = new TableBuilder();
+			tb.addRow("Array size: " + size, "range: " + random);
+			tb.addRow(sortFuncs);
+			
+			for (int x = 0; x < rounds; ++x) {
+				nextRow.clear();
+
+				// create array
+				arr = new int[size];
+				arrCopy = new int[size];
+				arrCopy2 = new int[size];
+				
+				for (String func: sortFuncs) {
+					// fill array
+					for(int i=0; i<size; i++) 
+						arr[i] = arrCopy[i] = randomGenerator.nextInt(random);
+
+					for (int i = 0; i < 100; i++) {
+						int j  = randomGenerator.nextInt(size);
+						int k  = randomGenerator.nextInt(size);
+						exchange(j, k);
+					}
+
+					test(func);
+				}
+
+				String[] rowArray = new String[nextRow.size()];
+				tb.addRow(nextRow.toArray(rowArray));
+			}
+			System.out.println(tb.toString());
+			System.out.println();
+		}
+	}
+
+	private static void problem5(String[] sortFuncs) {
+		randomGenerator = new Random();
+		
+		rounds = 100;
+		Integer[] ranges = {10000, 100000, 1000000};
+
+		size = 2000000;
+		for (Integer random: ranges) {
+			TableBuilder tb = new TableBuilder();
+			tb.addRow("Array size: " + size, "range: " + random);
+			tb.addRow(sortFuncs);
+			
+			for (int x = 0; x < rounds; ++x) {
+				nextRow.clear();
+
+				// create array
+				arr = new int[size];
+				arrCopy = new int[size];
+				arrCopy2 = new int[size];
+				
+				for (String func: sortFuncs) {
+					// fill array
+					for(int i=0; i<size; i++) 
+						arr[i] = arrCopy[i] = randomGenerator.nextInt(random);
+
+					reverse();
+					test(func);
+				}
+				String[] rowArray = new String[nextRow.size()];
+				tb.addRow(nextRow.toArray(rowArray));
+			}
+			System.out.println(tb.toString());
+			System.out.println();
+		}
+	}
+
+
+
+
 
 	public static void main(String[] args) {
 		
@@ -658,10 +792,39 @@ public class sorting {
 			String[] toRun = {"bottomupsort"};
 			String[] toRun1 = {"mergesort", "bottomupsort"};
 			String[] toRun2 = {"mergesort", "mergesortA", "mergesortB", "mergesortC", "quicksort", "quicksortA", "quicksortB", "quicksortC"};
-			runTests();
-			//comparePerformance(toRun1);
-			//comparePerformance(toRun2);
+			String[] toRun3 = {"quicksort2", "Arrays.sort", "heapsort", "mergesortB", "quicksortA"};
+			String[] toRun4 = {"insertsort on nearly-sorted", "quicksortA"};
+
+			//runTests();
+
+			//comparePerformance(toRun3);
 			//smallTest(toRun);
+			problem4(toRun4);
+
+			/*
+			read = new BufferedReader(new InputStreamReader(System.in));
+			randomGenerator = new Random();
+			try {
+				System.out.print("Please enter array size: ");
+				size = Integer.parseInt(read.readLine());
+				
+				System.out.print("Please enter the random range : ");
+				random = Integer.parseInt(read.readLine());
+			} catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
+			// create array
+			arr = new int[size];
+				
+			// fill array
+			for(int i=0; i<size; i++) 
+				arr[i] = randomGenerator.nextInt(random);
+
+			System.out.println(isSorted(0,size-1));
+			quicksort2(0, size-1);
+			System.out.println(isSorted(0,size-1));
+			*/
 			
 			break;
 			/*
